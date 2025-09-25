@@ -1,7 +1,5 @@
 <?php
 
-die("<h1>Tes Eksekusi PHP di index.php BERHASIL!</h1>");
-
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
