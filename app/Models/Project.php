@@ -11,8 +11,18 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'due_date', 'status'];
+    protected $fillable = [
+        'name', 
+        'description', 
+        'due_date', 
+        'status'
+    ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'due_date' => 'date',
     ];

@@ -35,7 +35,14 @@ class ProjectController extends Controller
     {
         abort_if($project->user_id !== auth()->id(), 403);
         
+        // Tandai notifikasi sebagai sudah dibaca jika ada parameter 'read'
+        if (request()->has('read')) {
+            auth()->user()->notifications->where('id', request('read'))->markAsRead();
+        }
+
         $tasks = $project->tasks()->get()->groupBy('status');
+        
+        // Pastikan semua kolom status ada, meskipun kosong
         $columns = [
             'To Do' => $tasks->get('To Do', collect()),
             'In Progress' => $tasks->get('In Progress', collect()),

@@ -25,10 +25,57 @@
                         <div class="space-y-3">
                             @forelse ($tasks as $task)
                                 <div class="bg-white dark:bg-slate-700 p-4 rounded-md shadow-sm border dark:border-slate-600">
-                                    <p class="font-medium text-gray-900 dark:text-white">{{ $task->title }}</p>
-                                    <div class="flex justify-between items-center mt-3">
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Dibuat: {{ $task->created_at->format('d M') }}</p>
+                                    <div class="flex items-start justify-between">
+                                        <p class="font-medium text-gray-900 dark:text-white {{ $task->is_completed ? 'line-through text-gray-500 dark:text-gray-400' : '' }}">
+                                            {{ $task->title }}
+                                        </p>
+                                        
+                                        <div class="flex-shrink-0 relative">
+                                            <x-dropdown align="right" width="48">
+                                                <x-slot name="trigger">
+                                                    <button class="text-gray-400 hover:text-gray-600">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                                                    </button>
+                                                </x-slot>
+                        
+                                                <x-slot name="content">
+                                                    <form method="POST" action="{{ route('tasks.update', $task) }}">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="hidden" name="status" value="To Do">
+                                                        <x-dropdown-link :href="route('tasks.update', $task)" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                            To Do
+                                                        </x-dropdown-link>
+                                                    </form>
+                                                    <form method="POST" action="{{ route('tasks.update', $task) }}">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="hidden" name="status" value="In Progress">
+                                                        <x-dropdown-link :href="route('tasks.update', $task)" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                            In Progress
+                                                        </x-dropdown-link>
+                                                    </form>
+                                                    <form method="POST" action="{{ route('tasks.update', $task) }}">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="hidden" name="status" value="Done">
+                                                        <x-dropdown-link :href="route('tasks.update', $task)" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                            Done
+                                                        </x-dropdown-link>
+                                                    </form>
+                                                    <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                                                    <form method="POST" action="{{ route('tasks.destroy', $task) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <x-dropdown-link :href="route('tasks.destroy', $task)" onclick="event.preventDefault(); if(confirm('Anda yakin ingin menghapus tugas ini?')) this.closest('form').submit();" class="text-red-600">
+                                                            Hapus
+                                                        </x-dropdown-link>
+                                                    </form>
+                                                </x-slot>
+                                            </x-dropdown>
                                         </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">Dibuat: {{ $task->created_at->format('d M') }}</p>
                                 </div>
                             @empty
                                 <div class="text-center text-sm text-gray-500 dark:text-gray-400 py-4">

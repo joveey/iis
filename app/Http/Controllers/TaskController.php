@@ -24,11 +24,17 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         abort_if($task->project->user_id !== auth()->id(), 403);
-
-        $task->update([
-            'is_completed' => !$task->is_completed
+    
+        $validated = $request->validate([
+            'status' => 'required|string|in:To Do,In Progress,Done',
         ]);
-
+    
+        // Update status dan is_completed berdasarkan input
+        $task->update([
+            'status' => $validated['status'],
+            'is_completed' => $validated['status'] === 'Done',
+        ]);
+    
         return back()->with('success', 'Status tugas berhasil diperbarui.');
     }
 

@@ -9,10 +9,10 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-   public function up(): void
+    public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('status')->default('To Do')->after('description');
+            $table->string('status')->default('To Do');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            //
+            $table->dropColumn('status');
         });
     }
 };
